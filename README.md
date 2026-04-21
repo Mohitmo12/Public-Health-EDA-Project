@@ -13,6 +13,7 @@ This project analyzes a large-scale public health dataset to understand disease 
 * Data Visualization (Matplotlib, Seaborn)
 * Statistical Analysis (T-test, Chi-square)
 * Jupyter Notebook
+  
 
 ---
 
@@ -30,6 +31,7 @@ This project analyzes a large-scale public health dataset to understand disease 
 
 * Compared transmission rates between vaccinated and non-vaccinated groups
 * Found significant reduction in transmission
+* This project demonstrates real-world public health data analysis.
 
 ### 2. Environmental Factors
 
