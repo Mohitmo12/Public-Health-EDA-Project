@@ -205,10 +205,9 @@ Insight:
   moderate-to-high humidity environments exhibit elevated transmission.
 """)
 
-
-# ─────────────────────────────────────────────
-# OBJECTIVE 3 — Age Group vs Disease Severity
-# ─────────────────────────────────────────────
+# ==============================
+# OBJECTIVE 3 — Age vs Severity
+# ==============================
 
 print("=" * 55)
 print("  OBJECTIVE 3 — Age vs Disease Severity")
@@ -217,34 +216,32 @@ print("=" * 55)
 sev_order = ['Mild', 'Moderate', 'Severe']
 
 
+fig, ax = plt.subplots(figsize=(8,5))
 
-
-
-# Stacked % by age group
+# Data prep
 age_sev = df.groupby(['Age_Group', 'Disease_Severity'],
-                      observed=True).size().unstack(fill_value=0)
+                     observed=True).size().unstack(fill_value=0)
+
 age_sev_pct = age_sev.div(age_sev.sum(axis=1), axis=0) * 100
-age_sev_pct[sev_order].plot(kind='bar', stacked=True,
-                             colormap='RdYlGn_r', ax=axes[1])
-axes[1].set_title("Disease Severity (%) by Age Group", fontsize=13)
-axes[1].set_xlabel("Age Group")
-axes[1].set_ylabel("% of Patients")
-axes[1].tick_params(axis='x', rotation=20)
-axes[1].legend(title='Severity')
+
+# Plot
+age_sev_pct[sev_order].plot(
+    kind='bar',
+    stacked=True,
+    colormap='RdYlGn_r',
+    ax=ax
+)
+
+ax.set_title("Disease Severity (%) by Age Group")
+ax.set_xlabel("Age Group")
+ax.set_ylabel("% of Patients")
+
+plt.tight_layout()
+
 
 plt.savefig("plots/plot_03_age_severity.png", dpi=150, bbox_inches='tight')
+
 plt.show()
-
-sev_age = df.groupby('Disease_Severity')['Age'].mean()
-print("Mean age by severity:\n", sev_age)
-
-print("""
-Insight:
-  Senior patients (60+) account for a disproportionately higher share of severe cases.
-  Children and young adults trend toward mild outcomes, 
-  confirming that age is a major risk factor for disease severity.
-""")
-
 
 # ─────────────────────────────────────────────
 # OBJECTIVE 4 — Social Behavior & Infection Risk
@@ -331,26 +328,33 @@ plt.tight_layout()
 plt.savefig("plots/plot_05_timeseries.png", dpi=150, bbox_inches='tight')
 plt.show()
 
+
 # Month-wise seasonal pattern
 month_order = ['Jan','Feb','Mar','Apr','May','Jun',
                'Jul','Aug','Sep','Oct','Nov','Dec']
+
 month_tx = df.groupby('Month_Name')['Transmission_Rate'].mean().reindex(month_order)
-plt.figure(figsize=(10, 4))
-sns.lineplot(x=month_tx.index, y=month_tx.values, marker='o',
-             color='darkorange', linewidth=2)
-plt.title("Average Transmission Rate by Month (Seasonal Pattern)", fontsize=13)
+
+plt.figure(figsize=(10,4))
+
+sns.lineplot(
+    x=month_tx.index,
+    y=month_tx.values,
+    marker='o',
+    color='darkorange',
+    linewidth=2
+)
+
+plt.title("Average Transmission Rate by Month (Seasonal Pattern)")
 plt.xlabel("Month")
 plt.ylabel("Avg Transmission Rate")
+
 plt.tight_layout()
 
-plt.show()
+
 plt.savefig("plots/plot_05b_seasonal.png", dpi=150, bbox_inches='tight')
-print("""
-Insight:
-  Case counts and transmission rates show clear wave patterns over time.
-  Certain months exhibit seasonal peaks, consistent with respiratory 
-  illness seasonality — important for planning hospital resource allocation.
-""")
+
+plt.show()
 
 
 # ─────────────────────────────────────────────
